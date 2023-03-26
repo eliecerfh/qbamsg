@@ -160,58 +160,50 @@ class _NewUsers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.topCenter,
-      child: Row(
-        children: [
-          SingleChildScrollView(
-            // Espaciado vertical de 8 píxeles
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            // Dirección de desplazamiento horizontal
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: newUsers
-                  .map<Widget>((user) => InkWell(
-                        onTap: () async {
-                          try {
-                            // Crea una sala y obtiene su ID
-                            final roomId =
-                                await BlocProvider.of<RoomCubit>(context)
-                                    .createRoom(user.id);
-                            // Navega a la pantalla de chat de la sala recién creada
-                            Navigator.of(context).push(ChatPage.route(roomId));
-                          } catch (_) {
-                            // Muestra una notificación de error en caso de que falle la creación de la sala
-                            context.showErrorSnackBar(
-                                message: 'Failed creating a new room');
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 60,
-                            child: Column(
-                              children: [
-                                // Avatar circular con las iniciales del usuario
-                                CircleAvatar(
-                                  child: Text(user.username.substring(0, 2)),
-                                ),
-                                const SizedBox(height: 8),
-                                // Nombre de usuario con un máximo de una línea y texto truncado con puntos suspensivos en caso de desbordamiento
-                                Text(
-                                  user.username,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+    return SingleChildScrollView(
+      // Espaciado vertical de 8 píxeles
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      // Dirección de desplazamiento horizontal
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: newUsers
+            .map<Widget>((user) => InkWell(
+                  onTap: () async {
+                    try {
+                      // Crea una sala y obtiene su ID
+                      final roomId = await BlocProvider.of<RoomCubit>(context)
+                          .createRoom(user.id);
+                      // Navega a la pantalla de chat de la sala recién creada
+                      Navigator.of(context).push(ChatPage.route(roomId));
+                    } catch (_) {
+                      // Muestra una notificación de error en caso de que falle la creación de la sala
+                      context.showErrorSnackBar(
+                          message: 'Failed creating a new room');
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 60,
+                      child: Column(
+                        children: [
+                          // Avatar circular con las iniciales del usuario
+                          CircleAvatar(
+                            child: Text(user.username.substring(0, 2)),
                           ),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          ), //jppkp
-        ],
+                          const SizedBox(height: 8),
+                          // Nombre de usuario con un máximo de una línea y texto truncado con puntos suspensivos en caso de desbordamiento
+                          Text(
+                            user.username,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ))
+            .toList(),
       ),
     );
   }
